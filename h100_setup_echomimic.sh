@@ -37,9 +37,16 @@ echo "✅ Repo ready."
 echo ""
 
 # ─────────────────────────────────────────────────────────────────────
-# Step 2: Install Python dependencies
+# Step 2: Fix requirements & Install Python dependencies
 # ─────────────────────────────────────────────────────────────────────
 echo "━━━ [2/5] Installing Python dependencies ━━━"
+
+# Lightning AI uses newer Python (3.12) which doesn't support TF 2.15.
+# We unpin tensorflow and a few others to let pip resolve them naturally.
+echo "⚡ Patching strict version requirements for compatibility..."
+sed -i 's/tensorflow==2.15.0/tensorflow/g' requirements.txt
+sed -i 's/moviepy==2.2.1/moviepy/g' requirements.txt
+
 pip install --upgrade pip setuptools wheel
 
 # Install main requirements
