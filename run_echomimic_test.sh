@@ -52,9 +52,13 @@ cp "${WORKSPACE}/AI_Vids/infer_long.py" .
 
 START=$(date +%s)
 
+echo "✂️  Trimming audio to test the 0:10 - 0:20 segment (skipping silence)..."
+TEST_AUDIO="${WORKSPACE}/inputs/test_audio_segment.wav"
+ffmpeg -y -i "${AUDIO_PATH}" -ss 00:00:10 -t 00:00:10 "${TEST_AUDIO}" -v quiet
+
 python infer_long.py \
     --image_path "${IMAGE_PATH}" \
-    --audio_path "${AUDIO_PATH}" \
+    --audio_path "${TEST_AUDIO}" \
     --prompt "A person is singing passionately with expressive body movement, swaying naturally to the rhythm of the music." \
     --num_inference_steps 15 \
     --config_path config/config.yaml \
