@@ -19,7 +19,7 @@ from src.wan_text_encoder import  WanT5EncoderModel
 from src.wan_transformer3d_audio_2512 import WanTransformerAudioMask3DModel as WanTransformer
 from src.pipeline_wan_fun_inpaint_audio_2512 import WanFunInpaintAudioPipeline
 
-from src.utils import (filter_kwargs, get_image_to_video_latent, get_image_to_video_latent2,
+from src.utils import (filter_kwargs, get_image_to_video_latent, get_image_to_video_latent3,
                                    save_videos_grid)
 
 from src.fm_solvers import FlowDPMSolverMultistepScheduler
@@ -367,7 +367,7 @@ def main():
         validation_image_start = Image.fromarray(ref_start).convert("RGB")
         sample_size_0, sample_size_1 = get_sample_size(validation_image_start, sample_size)
 
-        _, _, clip_image = get_image_to_video_latent2(validation_image_start, None, video_length=partial_video_length, sample_size=[sample_size_0, sample_size_1])
+        _, _, clip_image = get_image_to_video_latent3(validation_image_start, None, video_length=partial_video_length, sample_size=[sample_size_0, sample_size_1])
 
         init_frames = 0
         last_frames = init_frames + partial_video_length
@@ -381,7 +381,7 @@ def main():
                 if partial_video_length <= 0:
                     break
 
-            input_video, input_video_mask, _ = get_image_to_video_latent2(validation_image_start, None, video_length=partial_video_length, sample_size=[sample_size_0, sample_size_1])
+            input_video, input_video_mask, _ = get_image_to_video_latent3(validation_image_start, None, video_length=partial_video_length, sample_size=[sample_size_0, sample_size_1])
 
             partial_audio_embeds = audio_embeds[:, init_frames : init_frames + partial_video_length]
 
