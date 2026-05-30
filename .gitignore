@@ -1,0 +1,27 @@
+# Audio/video files (too large for git)
+*.mp3
+*.mp4
+*.wav
+*.m4a
+*.flac
+
+# Pickle files
+*.pkl
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Old phase scripts (superseded by lightning_setup.sh)
+lightning_phase1_cpu.sh
+lightning_phase2_gpu.sh

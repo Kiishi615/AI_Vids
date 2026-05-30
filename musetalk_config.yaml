@@ -1,0 +1,19 @@
+# ============================================================================
+# MuseTalk Inference Config — Template
+# ============================================================================
+# This file is auto-populated by run_lipsync_pipeline.sh at runtime.
+# You can also edit it manually and run MuseTalk directly:
+#   cd /workspace/MuseTalk
+#   python -m scripts.inference --inference_config /workspace/musetalk_config.yaml
+#
+# PARAMETERS:
+#   video_path  — The animated video from LivePortrait (has blink + head motion)
+#   audio_path  — Your audio file (.wav or .mp3)
+#   bbox_shift  — Adjusts mouth openness. 0 = neutral, positive = wider (for singing)
+#                 Try values between -7 and +7. Start with 0 and adjust.
+# ============================================================================
+
+task_0:
+  video_path: "__VIDEO_PATH__"
+  audio_path: "__AUDIO_PATH__"
+  bbox_shift: __BBOX_SHIFT__

@@ -1,0 +1,11 @@
+python app.py --server_name 0.0.0.0 --server_port 7860
+
+apt-get update && apt-get install -y ffmpeg
+
+pip install tyro && python app.py --server_name 0.0.0.0 --server_port 7860
+
+pip install -r requirements.txt
+pip install --upgrade gradio gradio_client
+python app.py --server_name 0.0.0.0 --server_port 7860
+
+python inference.py -s /workspace/Kid1.png -d /workspace/natural_blink.pkl
