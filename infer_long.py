@@ -373,9 +373,6 @@ def main():
         last_frames = init_frames + partial_video_length
         new_sample = None
         
-        # We need prompt embeds
-        prompt_embeds, negative_prompt_embeds = pipeline.encode_prompt(prompt, negative_prompt, dtype=weight_dtype)
-
         while init_frames < video_length_actual:
             if last_frames >= video_length_actual:
                 partial_video_length = video_length_actual - init_frames
@@ -391,8 +388,8 @@ def main():
             print(f"Generating chunk: frames {init_frames} to {init_frames+partial_video_length} / {video_length_actual}")
 
             sample = pipeline(
-                prompt_embeds=prompt_embeds,
-                negative_prompt_embeds=negative_prompt_embeds,
+                prompt=prompt,
+                negative_prompt=negative_prompt,
                 num_frames=partial_video_length,
                 audio_embeds=partial_audio_embeds,
                 audio_scale=audio_scale,
