@@ -59,7 +59,8 @@ ffmpeg -y -i "${AUDIO_PATH}" -ss 00:00:10 -t 00:00:10 "${TEST_AUDIO}" -v quiet
 python infer_long.py \
     --image_path "${IMAGE_PATH}" \
     --audio_path "${TEST_AUDIO}" \
-    --prompt "A person is singing passionately with expressive body movement, swaying naturally to the rhythm of the music." \
+    --prompt "A person is singing passionately with expressive body movement, swaying naturally to the rhythm of the music. Beautiful normal eyes, stable eyes, open eyes, looking at camera." \
+    --negative_prompt "morphing eyes, changing eyes, distorted eyes, closed eyes, cross-eyed, strange eyes, weird eyes, bad anatomy, bad face, deformed." \
     --num_inference_steps 15 \
     --config_path config/config.yaml \
     --model_name "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP" \
@@ -68,9 +69,9 @@ python infer_long.py \
     --save_path "${WORKSPACE}/outputs" \
     --sampler_name "Flow_Unipc" \
     --video_length 250 \
-    --guidance_scale 6.0 \
-    --audio_guidance_scale 2.8 \
-    --audio_scale 1.2 \
+    --guidance_scale 6.5 \
+    --audio_guidance_scale 2.5 \
+    --audio_scale 1.0 \
     --neg_scale 1.0 \
     --neg_steps 0 \
     --seed 43 \
