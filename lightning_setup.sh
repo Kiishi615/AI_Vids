@@ -54,7 +54,7 @@ pip install --no-cache-dir \
 
 # All project dependencies (pinned)
 pip install --no-cache-dir \
-    "numpy>=2.0,<2.2" \
+    "numpy==1.26.4" \
     "opencv-python>=4.9" \
     Pillow==10.2.0 \
     imageio==2.31.1 \
