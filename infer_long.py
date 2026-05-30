@@ -434,7 +434,6 @@ def main():
                 Image.fromarray((sample[0, :, i].transpose(0, 1).transpose(1, 2) * 255).cpu().numpy().astype(np.uint8)) 
                 for i in range(-overlap_video_length, 0)
             ]
-            validation_image_start = validation_image_start[-1]
 
             init_frames += partial_video_length - overlap_video_length
             last_frames = init_frames + partial_video_length
