@@ -70,7 +70,7 @@ mkdir -p "${MODELS_DIR}"
 if [ -d "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP" ] && [ "$(ls -A ${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP 2>/dev/null)" ]; then
     echo "⚡ Base model already downloaded, skipping."
 else
-    huggingface-cli download alibaba-pai/Wan2.1-Fun-V1.1-1.3B-InP \
+    hf download alibaba-pai/Wan2.1-Fun-V1.1-1.3B-InP \
         --local-dir "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP"
 fi
 echo "✅ Base model ready."
@@ -86,7 +86,7 @@ if [ -d "${MODELS_DIR}/chinese-wav2vec2-base" ] && [ "$(ls -A ${MODELS_DIR}/chin
     echo "⚡ Audio encoder already downloaded, skipping."
 else
     # Try HuggingFace first
-    huggingface-cli download TencentGameMate/chinese-wav2vec2-base \
+    hf download TencentGameMate/chinese-wav2vec2-base \
         --local-dir "${MODELS_DIR}/chinese-wav2vec2-base" 2>/dev/null \
     || {
         echo "⚠️  HuggingFace download failed, trying ModelScope fallback..."
@@ -110,7 +110,7 @@ TRANSFORMER_FILE="${MODELS_DIR}/echomimicv3-flash-pro/transformer/diffusion_pyto
 if [ -f "${TRANSFORMER_FILE}" ]; then
     echo "⚡ Transformer weights already downloaded, skipping."
 else
-    huggingface-cli download BadToBest/EchoMimicV3 \
+    hf download BadToBest/EchoMimicV3 \
         --include "echomimicv3-flash-pro/**" \
         --local-dir "${MODELS_DIR}"
 fi
