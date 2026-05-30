@@ -103,7 +103,7 @@ echo ""
 # ─────────────────────────────────────────────────────────────────────
 echo "━━━ [5/5] Downloading EchoMimicV3 Flash-Pro weights (~3.5GB) ━━━"
 
-TRANSFORMER_FILE="${MODELS_DIR}/echomimicv3-flash-pro/transformer/diffusion_pytorch_model.safetensors"
+TRANSFORMER_FILE="${MODELS_DIR}/echomimicv3-flash-pro/diffusion_pytorch_model.safetensors"
 if [ -f "${TRANSFORMER_FILE}" ]; then
     echo "⚡ Transformer weights already downloaded, skipping."
 else

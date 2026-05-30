@@ -56,7 +56,7 @@ python infer_flash.py \
     --num_inference_steps 15 \
     --config_path config/config.yaml \
     --model_name "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP" \
-    --transformer_path "${MODELS_DIR}/echomimicv3-flash-pro/transformer/diffusion_pytorch_model.safetensors" \
+    --transformer_path "${MODELS_DIR}/echomimicv3-flash-pro/diffusion_pytorch_model.safetensors" \
     --wav2vec_model_dir "${MODELS_DIR}/chinese-wav2vec2-base" \
     --save_path "${WORKSPACE}/outputs" \
     --sampler_name "Flow_Unipc" \
