@@ -52,8 +52,8 @@ START=$(date +%s)
 python infer_flash.py \
     --image_path "${IMAGE_PATH}" \
     --audio_path "${AUDIO_PATH}" \
-    --prompt "A person is speaking naturally with subtle head movement." \
-    --num_inference_steps 8 \
+    --prompt "A person is singing passionately with expressive body movement, swaying naturally to the rhythm of the music." \
+    --num_inference_steps 15 \
     --config_path config/config.yaml \
     --model_name "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP" \
     --transformer_path "${MODELS_DIR}/echomimicv3-flash-pro/transformer/diffusion_pytorch_model.safetensors" \

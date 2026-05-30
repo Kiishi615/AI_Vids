@@ -22,7 +22,7 @@ MODELS_DIR="${REPO_DIR}/models/flash"
 # Input files — use args or defaults
 IMAGE_PATH="${1:-${WORKSPACE}/inputs/portrait.png}"
 AUDIO_PATH="${2:-${WORKSPACE}/inputs/audio.wav}"
-PROMPT="${3:-A person is singing expressively with natural head and body movement.}"
+PROMPT="${3:-A person is singing passionately with expressive body movement, swaying naturally to the rhythm of the music.}"
 
 # Validate inputs exist
 if [ ! -f "${IMAGE_PATH}" ]; then
@@ -71,7 +71,7 @@ python infer_flash.py \
     --image_path "${IMAGE_PATH}" \
     --audio_path "${AUDIO_PATH}" \
     --prompt "${PROMPT}" \
-    --num_inference_steps 8 \
+    --num_inference_steps 15 \
     --config_path config/config.yaml \
     --model_name "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP" \
     --transformer_path "${MODELS_DIR}/echomimicv3-flash-pro/transformer/diffusion_pytorch_model.safetensors" \
