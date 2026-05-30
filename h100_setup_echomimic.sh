@@ -17,7 +17,7 @@ echo "╚═══════════════════════�
 echo ""
 
 START=$(date +%s)
-WORKSPACE="${HOME}/workspace"
+WORKSPACE="${HOME}"
 REPO_DIR="${WORKSPACE}/echomimic_v3"
 MODELS_DIR="${REPO_DIR}/models/flash"
 
@@ -148,10 +148,10 @@ if [ "$PASS" = true ]; then
     echo "╠══════════════════════════════════════════════════════════════╣"
     echo "║                                                            ║"
     echo "║  Next steps:                                               ║"
-    echo "║  1. Upload portrait  → ~/workspace/inputs/portrait.png     ║"
-    echo "║  2. Upload audio     → ~/workspace/inputs/audio.wav        ║"
-    echo "║  3. Run test:  bash ~/workspace/run_echomimic_test.sh      ║"
-    echo "║  4. Run full:  bash ~/workspace/run_echomimic_full.sh      ║"
+    echo "║  1. Upload portrait  → ~/inputs/portrait.png               ║"
+    echo "║  2. Upload audio     → ~/inputs/audio.wav                  ║"
+    echo "║  3. Run test:  bash ~/AI_Vids/run_echomimic_test.sh        ║"
+    echo "║  4. Run full:  bash ~/AI_Vids/run_echomimic_full.sh        ║"
     echo "║                                                            ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
 else

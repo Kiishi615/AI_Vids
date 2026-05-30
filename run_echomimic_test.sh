@@ -5,14 +5,14 @@
 # Run this FIRST to validate your setup before the full 5-minute generation.
 # Uses only 250 frames (~10 seconds at 25fps), finishes in ~2-3 minutes.
 #
-# Usage:  bash ~/workspace/run_echomimic_test.sh
+# Usage:  bash ~/AI_Vids/run_echomimic_test.sh
 # 
 # Optional args:
-#   bash ~/workspace/run_echomimic_test.sh /path/to/portrait.png /path/to/audio.wav
+#   bash ~/AI_Vids/run_echomimic_test.sh /path/to/portrait.png /path/to/audio.wav
 ###############################################################################
 set -euo pipefail
 
-WORKSPACE="${HOME}/workspace"
+WORKSPACE="${HOME}"
 REPO_DIR="${WORKSPACE}/echomimic_v3"
 MODELS_DIR="${REPO_DIR}/models/flash"
 
@@ -23,14 +23,14 @@ AUDIO_PATH="${2:-${WORKSPACE}/inputs/audio.wav}"
 # Validate inputs exist
 if [ ! -f "${IMAGE_PATH}" ]; then
     echo "❌ Portrait image not found: ${IMAGE_PATH}"
-    echo "   Upload your portrait to ~/workspace/inputs/portrait.png"
+    echo "   Upload your portrait to ~/inputs/portrait.png"
     echo "   Or pass a custom path: bash $0 /path/to/portrait.png /path/to/audio.wav"
     exit 1
 fi
 
 if [ ! -f "${AUDIO_PATH}" ]; then
     echo "❌ Audio file not found: ${AUDIO_PATH}"
-    echo "   Upload your audio to ~/workspace/inputs/audio.wav"
+    echo "   Upload your audio to ~/inputs/audio.wav"
     echo "   Or pass a custom path: bash $0 /path/to/portrait.png /path/to/audio.wav"
     exit 1
 fi
@@ -90,5 +90,5 @@ echo "║  ✅ TEST COMPLETE in ${MINS}m ${SECS}s                          ║"
 echo "║  Check output: ls -la ${WORKSPACE}/outputs/              ║"
 echo "║                                                            ║"
 echo "║  If it looks good, run the full version:                   ║"
-echo "║  bash ~/workspace/run_echomimic_full.sh                    ║"
+echo "║  bash ~/AI_Vids/run_echomimic_full.sh                      ║"
 echo "╚══════════════════════════════════════════════════════════════╝"

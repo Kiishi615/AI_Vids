@@ -8,14 +8,14 @@
 # Estimated time on H100: 30-60 minutes
 # Estimated cost: ~$1.00-$2.00 at $1.99/hr
 #
-# Usage:  bash ~/workspace/run_echomimic_full.sh
+# Usage:  bash ~/AI_Vids/run_echomimic_full.sh
 #
 # Optional args:
-#   bash ~/workspace/run_echomimic_full.sh /path/to/portrait.png /path/to/audio.wav "Custom prompt"
+#   bash ~/AI_Vids/run_echomimic_full.sh /path/to/portrait.png /path/to/audio.wav "Custom prompt"
 ###############################################################################
 set -euo pipefail
 
-WORKSPACE="${HOME}/workspace"
+WORKSPACE="${HOME}"
 REPO_DIR="${WORKSPACE}/echomimic_v3"
 MODELS_DIR="${REPO_DIR}/models/flash"
 
@@ -27,13 +27,13 @@ PROMPT="${3:-A person is singing passionately with expressive body movement, swa
 # Validate inputs exist
 if [ ! -f "${IMAGE_PATH}" ]; then
     echo "❌ Portrait image not found: ${IMAGE_PATH}"
-    echo "   Upload your portrait to ~/workspace/inputs/portrait.png"
+    echo "   Upload your portrait to ~/inputs/portrait.png"
     exit 1
 fi
 
 if [ ! -f "${AUDIO_PATH}" ]; then
     echo "❌ Audio file not found: ${AUDIO_PATH}"
-    echo "   Upload your audio to ~/workspace/inputs/audio.wav"
+    echo "   Upload your audio to ~/inputs/audio.wav"
     exit 1
 fi
 
