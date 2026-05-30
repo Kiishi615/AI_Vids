@@ -81,7 +81,7 @@ python infer_long.py \
     --audio_path "${AUDIO_PATH}" \
     --prompt "A person is singing passionately with expressive body movement, swaying naturally to the rhythm of the music." \
     --negative_prompt "bad anatomy, bad face, deformed, distorted, weird, strange." \
-    --num_inference_steps 15 \
+    --num_inference_steps 25 \
     --config_path config/config.yaml \
     --model_name "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP" \
     --transformer_path "${MODELS_DIR}/echomimicv3-flash-pro/diffusion_pytorch_model.safetensors" \
