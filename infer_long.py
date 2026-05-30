@@ -383,7 +383,7 @@ def main():
 
             input_video, input_video_mask, _ = get_image_to_video_latent2(validation_image_start, None, video_length=partial_video_length, sample_size=[sample_size_0, sample_size_1])
 
-            partial_audio_embeds = audio_embeds[:, init_frames * 2 : (init_frames + partial_video_length) * 2]
+            partial_audio_embeds = audio_embeds[:, init_frames : init_frames + partial_video_length]
 
             print(f"Generating chunk: frames {init_frames} to {init_frames+partial_video_length} / {video_length_actual}")
 
