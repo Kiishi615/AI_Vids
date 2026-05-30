@@ -74,7 +74,7 @@ pip install --no-cache-dir \
     huggingface-hub==0.30.2 \
     kornia==0.8.0 \
     DeepCache==0.1.1 \
-    mediapipe==0.10.11 \
+    mediapipe==0.10.14 \
     safetensors \
     tyro dill lmdb \
     "gradio==5.24.0"
