@@ -69,8 +69,8 @@ python infer_long.py \
     --sampler_name "Flow_Unipc" \
     --video_length 250 \
     --guidance_scale 6.0 \
-    --audio_guidance_scale 3.5 \
-    --audio_scale 1.5 \
+    --audio_guidance_scale 2.8 \
+    --audio_scale 1.2 \
     --neg_scale 1.0 \
     --neg_steps 0 \
     --seed 43 \
