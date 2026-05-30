@@ -426,6 +426,24 @@ def main():
             else:
                 new_sample = sample
 
+            # --- PROGRESSIVE SAVE ---
+            # Save intermediate progress so the user doesn't lose the video if the machine crashes/runs out of credits
+            tmp_video_path = os.path.join(save_path, f"{image_name}_tmp.mp4")
+            video_length_current = min(sample.shape[2], video_length_actual)
+            save_videos_grid(sample[:,:,:video_length_current], tmp_video_path, fps=fps)
+            
+            try:
+                video_clip = VideoFileClip(tmp_video_path)
+                current_audio_clip = audio_clip.subclipped(0, video_length_current / fps)
+                video_clip = video_clip.with_audio(current_audio_clip)
+                # Save silently so we don't spam the terminal with progress bars every chunk
+                video_clip.write_videofile(output_video_path, codec="libx264", audio_codec="aac", threads=2, logger=None)
+                os.remove(tmp_video_path)
+                print(f"💾 Progress saved: {output_video_path}")
+            except Exception as e:
+                print(f"⚠️ Warning: Could not save intermediate video: {e}")
+            # ------------------------
+
             if last_frames >= video_length_actual:
                 break
 
@@ -438,17 +456,7 @@ def main():
             init_frames += partial_video_length - overlap_video_length
             last_frames = init_frames + partial_video_length
 
-        tmp_video_path = os.path.join(save_path, f"{image_name}_tmp.mp4")
-        video_length_final = min(sample.shape[2], video_length_actual)
-        save_videos_grid(sample[:,:,:video_length_final], tmp_video_path, fps=fps)
-        
-        video_clip = VideoFileClip(tmp_video_path)
-        audio_clip = audio_clip.subclipped(0, video_length_final / fps)
-        video_clip = video_clip.with_audio(audio_clip)
-        video_clip.write_videofile(output_video_path, codec="libx264", audio_codec="aac", threads=2)
-
-        os.remove(tmp_video_path)
-        print(f"Saved output to: {output_video_path}")
+        print(f"✅ Generation complete! Final video at: {output_video_path}")
 
 if __name__ == "__main__":
     main()
