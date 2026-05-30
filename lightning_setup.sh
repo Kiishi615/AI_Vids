@@ -160,7 +160,7 @@ print(f'PyTorch:      {torch.__version__}')
 print(f'CUDA:         {torch.cuda.is_available()}')
 if torch.cuda.is_available():
     print(f'GPU:          {torch.cuda.get_device_name(0)}')
-    vram = torch.cuda.get_device_properties(0).total_mem / 1e9
+    vram = torch.cuda.get_device_properties(0).total_memory / 1e9
     print(f'VRAM:         {vram:.1f} GB')
 
 import diffusers, transformers, kornia, librosa, cv2, mediapipe, insightface
@@ -184,7 +184,7 @@ for f in "$WORKSPACE/LatentSync/checkpoints/latentsync_unet.pt" \
     fi
 done
 if [ -d "$WORKSPACE/LivePortrait/pretrained_weights" ]; then
-    echo "  ✅ LivePortrait weights ($(du -sh "$WORKSPACE/LivePortrait/pretrained_weights" | cut -f1))"
+    echo "  ✅ LivePortrait weights ($(du -sh --apparent-size "$WORKSPACE/LivePortrait/pretrained_weights" 2>/dev/null | cut -f1))"
 else
     echo "  ❌ MISSING: LivePortrait weights"
     ERRORS=$((ERRORS + 1))
