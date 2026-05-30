@@ -21,7 +21,7 @@
 set -e
 
 WORKSPACE="$HOME/workspace"
-CONDA_ENV="lipsync"
+CONDA_ENV="base"  # Lightning AI only allows 1 env — use the default
 
 echo ""
 echo "============================================"
@@ -40,17 +40,8 @@ sudo apt-get install -y -qq build-essential libgl1 ffmpeg git-lfs 2>/dev/null ||
 echo "  [✓] Done"
 
 # ── 2. Conda environment + ALL packages ────────────────────────────────────
-echo "[2/5] Conda environment: $CONDA_ENV"
-
-if conda env list | grep -q "$CONDA_ENV"; then
-    echo "  [✓] Env exists, activating..."
-else
-    echo "  [→] Creating env (Python 3.10)..."
-    conda create -n "$CONDA_ENV" python=3.10 -y -q
-fi
-
-eval "$(conda shell.bash hook)"
-conda activate "$CONDA_ENV"
+# Lightning AI only allows 1 conda env per Studio — use the default
+echo "[2/5] Using default environment..."
 echo "  [✓] Python $(python --version) at $(which python)"
 
 echo "  [→] Installing packages (this takes a few minutes)..."
