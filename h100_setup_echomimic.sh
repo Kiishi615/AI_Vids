@@ -70,8 +70,7 @@ mkdir -p "${MODELS_DIR}"
 if [ -d "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP" ] && [ "$(ls -A ${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP 2>/dev/null)" ]; then
     echo "⚡ Base model already downloaded, skipping."
 else
-    hf download alibaba-pai/Wan2.1-Fun-V1.1-1.3B-InP \
-        --local-dir "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP"
+    python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='alibaba-pai/Wan2.1-Fun-V1.1-1.3B-InP', local_dir='${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP')"
 fi
 echo "✅ Base model ready."
 echo ""
@@ -85,9 +84,7 @@ echo "━━━ [4/5] Downloading audio encoder: chinese-wav2vec2-base (~0.4GB) 
 if [ -d "${MODELS_DIR}/chinese-wav2vec2-base" ] && [ "$(ls -A ${MODELS_DIR}/chinese-wav2vec2-base 2>/dev/null)" ]; then
     echo "⚡ Audio encoder already downloaded, skipping."
 else
-    # Try HuggingFace first
-    hf download TencentGameMate/chinese-wav2vec2-base \
-        --local-dir "${MODELS_DIR}/chinese-wav2vec2-base" 2>/dev/null \
+    python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='TencentGameMate/chinese-wav2vec2-base', local_dir='${MODELS_DIR}/chinese-wav2vec2-base')" 2>/dev/null \
     || {
         echo "⚠️  HuggingFace download failed, trying ModelScope fallback..."
         pip install modelscope 2>/dev/null || true
@@ -110,9 +107,7 @@ TRANSFORMER_FILE="${MODELS_DIR}/echomimicv3-flash-pro/transformer/diffusion_pyto
 if [ -f "${TRANSFORMER_FILE}" ]; then
     echo "⚡ Transformer weights already downloaded, skipping."
 else
-    hf download BadToBest/EchoMimicV3 \
-        --include "echomimicv3-flash-pro/**" \
-        --local-dir "${MODELS_DIR}"
+    python3 -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='BadToBest/EchoMimicV3', allow_patterns='echomimicv3-flash-pro/**', local_dir='${MODELS_DIR}')"
 fi
 echo "✅ Transformer weights ready."
 echo ""
