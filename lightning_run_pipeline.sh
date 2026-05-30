@@ -8,13 +8,14 @@
 #
 # USAGE:
 #   conda activate lipsync
-#   bash lightning_run_pipeline.sh <image> <audio> [pickle] [steps]
+#   bash lightning_run_pipeline.sh <image> <audio> [pickle] [steps] [guidance]
 #
 # ARGUMENTS:
 #   1. image    — Portrait image (PNG, JPG)
 #   2. audio    — Audio track (WAV, MP3, etc.)
 #   3. pickle   — (Optional) Motion pickle. Default: auto-generated
-#   4. steps    — (Optional) LatentSync inference steps. Default: 25
+#   4. steps    — (Optional) LatentSync inference steps. Default: 30
+#   5. guidance — (Optional) Guidance scale 1.0-3.0. Default: 2.5 (singing)
 #
 # EXAMPLES:
 #   bash lightning_run_pipeline.sh ~/workspace/portraits/Kid1.png ~/workspace/audio/song.mp3
@@ -35,7 +36,8 @@ WORKSPACE="$HOME/workspace"
 IMAGE="${1:?ERROR: Provide image as 1st argument (e.g. ~/workspace/portraits/Kid1.png)}"
 AUDIO="${2:?ERROR: Provide audio as 2nd argument (e.g. ~/workspace/audio/song.mp3)}"
 PICKLE="${3:-}"
-STEPS="${4:-25}"
+STEPS="${4:-30}"
+GUIDANCE="${5:-2.5}"
 
 # ── Validate ────────────────────────────────────────────────────────────────
 [ ! -f "$IMAGE" ] && echo "❌ Image not found: $IMAGE" && exit 1
@@ -73,7 +75,7 @@ echo "============================================"
 echo "  Image:       $IMAGE"
 echo "  Audio:       $AUDIO  (${AUDIO_MINS}m ${AUDIO_SECS}s)"
 echo "  Pickle:      $PICKLE"
-echo "  LatentSync:  ${STEPS} steps"
+echo "  LatentSync:  ${STEPS} steps, guidance ${GUIDANCE}"
 echo "============================================"
 echo ""
 
@@ -112,19 +114,37 @@ echo "✅ Animated clip: $ANIMATED (${CLIP_DURATION}s)"
 echo ""
 
 # ════════════════════════════════════════════════════════════════════════════
-# STEP 2: Loop the animated clip to match audio length
+# STEP 2: Loop the animated clip to match audio length (with crossfade)
 # ════════════════════════════════════════════════════════════════════════════
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "🔁 STEP 2/3: Looping clip to match audio (${AUDIO_MINS}m ${AUDIO_SECS}s)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 LOOPED="$WORKSPACE/output/${NAME}_looped.mp4"
-LOOPS=$(awk "BEGIN {print int(($AUDIO_DURATION / $CLIP_DURATION) + 1)}")
-echo "  Clip: ${CLIP_DURATION}s × ${LOOPS} loops → trimmed to ${AUDIO_DURATION}s"
+XFADE_DUR=0.5  # Crossfade duration in seconds for smooth loop transitions
+
+# Step 2a: Create a crossfaded master clip (two copies blended at the seam)
+# This eliminates the jarring cut when the animation loops
+CLIP_DUR_INT=$(printf '%.0f' "$CLIP_DURATION")
+XFADE_OFFSET=$(awk "BEGIN {printf \"%.2f\", $CLIP_DURATION - $XFADE_DUR}")
+MASTER_CLIP="$WORKSPACE/output/${NAME}_master_loop.mp4"
+
+echo "  Creating crossfaded master clip (${XFADE_DUR}s fade)..."
+ffmpeg -y -i "$ANIMATED" -i "$ANIMATED" \
+    -filter_complex \
+    "[0:v][1:v]xfade=transition=fade:duration=${XFADE_DUR}:offset=${XFADE_OFFSET},format=yuv420p[v]" \
+    -map "[v]" -an \
+    -c:v libx264 -preset fast -crf 18 \
+    "$MASTER_CLIP" 2>/dev/null
+
+# Step 2b: Loop the master clip to fill the audio duration
+MASTER_DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$MASTER_CLIP")
+LOOPS=$(awk "BEGIN {print int(($AUDIO_DURATION / $MASTER_DURATION) + 1)}")
+echo "  Master clip: ${MASTER_DURATION}s × ${LOOPS} loops → trimmed to ${AUDIO_DURATION}s"
 
 CONCAT_LIST=$(mktemp "$WORKSPACE/concat_XXXX.txt")
 for i in $(seq 1 $LOOPS); do
-    echo "file '$(realpath $ANIMATED)'" >> "$CONCAT_LIST"
+    echo "file '$(realpath $MASTER_CLIP)'" >> "$CONCAT_LIST"
 done
 
 ffmpeg -y -f concat -safe 0 -i "$CONCAT_LIST" \
@@ -160,7 +180,7 @@ if [ "$DURATION" -le 20 ]; then
         --unet_config_path "configs/unet/stage2_512.yaml" \
         --inference_ckpt_path "checkpoints/latentsync_unet.pt" \
         --inference_steps "$STEPS" \
-        --guidance_scale 1.5 \
+        --guidance_scale "$GUIDANCE" \
         --enable_deepcache \
         --video_path "$LOOPED" \
         --audio_path "$AUDIO" \
@@ -193,7 +213,7 @@ else
             --unet_config_path "configs/unet/stage2_512.yaml" \
             --inference_ckpt_path "checkpoints/latentsync_unet.pt" \
             --inference_steps "$STEPS" \
-            --guidance_scale 1.5 \
+            --guidance_scale "$GUIDANCE" \
             --enable_deepcache \
             --video_path "$CHUNK_VIDEO" \
             --audio_path "$CHUNK_AUDIO" \

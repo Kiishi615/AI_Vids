@@ -26,9 +26,9 @@ DURATION_SECONDS = 6.0      # Total animation length
 FPS = 30                     # Frames per second
 BLINK_TIMES = [1.8, 4.3]    # When blinks happen (seconds) — irregular spacing feels natural
 BLINK_DURATION = 0.15        # How long a blink takes (seconds) — 150ms is realistic
-HEAD_DRIFT_AMPLITUDE = 1.5   # Max head drift in degrees (keep under 3 for subtle)
-HEAD_DRIFT_SPEED = 0.4       # How fast the head drifts (Hz) — slow = natural
-BREATHE_AMPLITUDE = 0.3      # Subtle vertical "breathing" motion (degrees)
+HEAD_DRIFT_AMPLITUDE = 0.6   # Max head drift in degrees (0.6 = barely perceptible sway)
+HEAD_DRIFT_SPEED = 0.25      # How fast the head drifts (Hz) — slower = more natural
+BREATHE_AMPLITUDE = 0.2      # Subtle vertical "breathing" motion (degrees)
 BREATHE_SPEED = 0.25         # Breathing frequency (Hz) — ~15 breaths/min
 
 
