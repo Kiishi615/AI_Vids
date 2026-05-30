@@ -77,6 +77,7 @@ pip install --no-cache-dir \
     mediapipe==0.10.14 \
     safetensors \
     tyro dill lmdb \
+    pykalman \
     "gradio==5.24.0"
 
 # Packages that can be flaky
