@@ -72,7 +72,7 @@ START=$(date +%s)
 
 # Count frames (roughly) based on audio length
 DURATION=$(ffprobe -i "${AUDIO_PATH}" -show_entries format=duration -v quiet -of csv="p=0")
-FRAMES=$(echo "$DURATION * 25" | bc | awk '{print int($1+0.5)}')
+FRAMES=$(echo "$DURATION" | awk '{print int($1 * 25 + 0.5)}')
 
 echo "  Audio Duration: ~${DURATION}s (${FRAMES} frames)"
 
