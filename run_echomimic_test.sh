@@ -47,9 +47,12 @@ echo ""
 
 cd "${REPO_DIR}"
 
+# Copy our custom chunking script into the repo
+cp "${WORKSPACE}/AI_Vids/infer_long.py" .
+
 START=$(date +%s)
 
-python infer_flash.py \
+python infer_long.py \
     --image_path "${IMAGE_PATH}" \
     --audio_path "${AUDIO_PATH}" \
     --prompt "A person is singing passionately with expressive body movement, swaying naturally to the rhythm of the music." \
@@ -62,14 +65,17 @@ python infer_flash.py \
     --sampler_name "Flow_Unipc" \
     --video_length 250 \
     --guidance_scale 6.0 \
-    --audio_guidance_scale 2.0 \
-    --audio_scale 1.0 \
+    --audio_guidance_scale 3.5 \
+    --audio_scale 1.5 \
     --neg_scale 1.0 \
     --neg_steps 0 \
     --seed 43 \
     --enable_teacache \
     --teacache_threshold 0.08 \
     --num_skip_start_steps 5 \
+    --use_dynamic_cfg \
+    --use_dynamic_acfg \
+    --enable_riflex \
     --riflex_k 6 \
     --ulysses_degree 1 \
     --ring_degree 1 \

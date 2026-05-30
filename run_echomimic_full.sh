@@ -65,9 +65,18 @@ sleep 5
 
 cd "${REPO_DIR}"
 
+# Copy our custom chunking script into the repo
+cp "${WORKSPACE}/AI_Vids/infer_long.py" .
+
 START=$(date +%s)
 
-python infer_flash.py \
+# Count frames (roughly) based on audio length
+DURATION=$(ffprobe -i "${AUDIO_PATH}" -show_entries format=duration -v quiet -of csv="p=0")
+FRAMES=$(echo "$DURATION * 25" | bc | awk '{print int($1+0.5)}')
+
+echo "  Audio Duration: ~${DURATION}s (${FRAMES} frames)"
+
+python infer_long.py \
     --image_path "${IMAGE_PATH}" \
     --audio_path "${AUDIO_PATH}" \
     --prompt "${PROMPT}" \
@@ -80,14 +89,17 @@ python infer_flash.py \
     --sampler_name "Flow_Unipc" \
     --video_length "${TOTAL_FRAMES}" \
     --guidance_scale 6.0 \
-    --audio_guidance_scale 2.0 \
-    --audio_scale 1.0 \
+    --audio_guidance_scale 3.5 \
+    --audio_scale 1.5 \
     --neg_scale 1.0 \
     --neg_steps 0 \
     --seed 43 \
     --enable_teacache \
     --teacache_threshold 0.08 \
     --num_skip_start_steps 5 \
+    --use_dynamic_cfg \
+    --use_dynamic_acfg \
+    --enable_riflex \
     --riflex_k 6 \
     --ulysses_degree 1 \
     --ring_degree 1 \
