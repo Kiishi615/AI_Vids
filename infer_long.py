@@ -448,10 +448,20 @@ def main():
                 break
 
             # Set new validation_image_start for the next chunk from the overlap section
-            validation_image_start = [
+            from PIL import ImageEnhance
+            validation_image_start_raw = [
                 Image.fromarray((sample[0, :, i].transpose(0, 1).transpose(1, 2) * 255).cpu().numpy().astype(np.uint8)) 
                 for i in range(-overlap_video_length, 0)
             ]
+            
+            # Anti-Drift Hack: Sharpen the frames slightly before feeding them back into the VAE
+            # This actively counteracts the slight blur introduced by the AutoencoderKL over 90 iterations.
+            validation_image_start = []
+            for img in validation_image_start_raw:
+                enhancer = ImageEnhance.Sharpness(img)
+                # 1.2 adds 20% artificial sharpness to compensate for the blur
+                img_sharp = enhancer.enhance(1.2)
+                validation_image_start.append(img_sharp)
 
             init_frames += partial_video_length - overlap_video_length
             last_frames = init_frames + partial_video_length
