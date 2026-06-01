@@ -17,6 +17,13 @@ conda activate echomimic_v3
 WORKSPACE="/teamspace/studios/this_studio"
 MODELS_DIR="${WORKSPACE}/echomimic_v3/models/flash"
 
+# Auto-generate dynamic camera angles from the original portrait
+echo "================================================="
+echo "🎥 PREPARING VIRTUAL CAMERAS"
+echo "================================================="
+cd ${WORKSPACE}/AI_Vids
+python generate_camera_angles.py "${WORKSPACE}/inputs/portrait.png"
+
 # Find all portrait images matching 'portrait*.png' or 'portrait*.jpg'
 shopt -s nullglob
 IMAGE_FILES=(${WORKSPACE}/inputs/portrait*.png ${WORKSPACE}/inputs/portrait*.jpg)
