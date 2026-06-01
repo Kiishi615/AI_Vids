@@ -76,6 +76,7 @@ for i in $(seq 0 $((NUM_SEGMENTS - 1))); do
         --config_path config/config.yaml \
         --model_name "${MODELS_DIR}/Wan2.1-Fun-V1.1-1.3B-InP" \
         --transformer_path "${MODELS_DIR}/echomimicv3-flash-pro/diffusion_pytorch_model.safetensors" \
+        --wav2vec_model_dir "${MODELS_DIR}/chinese-wav2vec2-base" \
         --save_path "${OUTPUT_DIR}" \
         --sampler_name "Flow_Unipc" \
         --video_length ${FRAMES} \
