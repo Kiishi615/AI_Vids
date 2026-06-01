@@ -38,6 +38,8 @@ echo "Splitting into ${SEGMENT_LENGTH}s segments to prevent AI blur drift..."
 echo "================================================="
 
 cd ${WORKSPACE}/AI_Vids
+cp infer_long.py ${WORKSPACE}/echomimic_v3/
+cd ${WORKSPACE}/echomimic_v3
 
 # Calculate number of segments
 NUM_SEGMENTS=$(( (TOTAL_DURATION + SEGMENT_LENGTH - 1) / SEGMENT_LENGTH ))
