@@ -17,7 +17,16 @@ conda activate echomimic_v3
 WORKSPACE="/teamspace/studios/this_studio"
 MODELS_DIR="${WORKSPACE}/echomimic_v3/models/flash"
 
-IMAGE_PATH="${WORKSPACE}/inputs/portrait.png"
+# Find all portrait images matching 'portrait*.png' or 'portrait*.jpg'
+shopt -s nullglob
+IMAGE_FILES=(${WORKSPACE}/inputs/portrait*.png ${WORKSPACE}/inputs/portrait*.jpg)
+shopt -u nullglob
+
+if [ ${#IMAGE_FILES[@]} -eq 0 ]; then
+    echo "❌ No portrait images found in ${WORKSPACE}/inputs/"
+    echo "   Please upload portrait.png (and optionally portrait_2.png, etc) to ~/inputs/"
+    exit 1
+fi
 FULL_AUDIO_PATH="${WORKSPACE}/inputs/audio.wav"
 
 OUTPUT_DIR="${WORKSPACE}/outputs/music_video"
@@ -35,6 +44,10 @@ echo "================================================="
 echo "🎵 MUSIC VIDEO AUTO-SPLICER INITIATED 🎵"
 echo "Total audio duration: ${TOTAL_DURATION}s"
 echo "Splitting into ${SEGMENT_LENGTH}s segments to prevent AI blur drift..."
+echo "Found ${#IMAGE_FILES[@]} camera angles:"
+for img in "${IMAGE_FILES[@]}"; do
+    echo "  - $(basename "$img")"
+done
 echo "================================================="
 
 cd ${WORKSPACE}/AI_Vids
@@ -66,9 +79,16 @@ for i in $(seq 0 $((NUM_SEGMENTS - 1))); do
     
     echo "Segment Frames: $FRAMES"
     
+    IMAGE_IDX=$(( i % ${#IMAGE_FILES[@]} ))
+    CURRENT_IMAGE="${IMAGE_FILES[$IMAGE_IDX]}"
+    IMAGE_BASENAME=$(basename "$CURRENT_IMAGE")
+    IMAGE_NAME="${IMAGE_BASENAME%.*}"
+    
+    echo "🎥 Camera Angle: $IMAGE_BASENAME"
+    
     # Run EchoMimic Inference
     python infer_long.py \
-        --image_path "${IMAGE_PATH}" \
+        --image_path "${CURRENT_IMAGE}" \
         --audio_path "${SEGMENT_AUDIO}" \
         --prompt "A person is singing passionately with expressive body movement, swaying naturally to the rhythm of the music. Beautiful normal eyes, stable eyes, open eyes, looking at camera." \
         --negative_prompt "morphing eyes, changing eyes, distorted eyes, closed eyes, cross-eyed, strange eyes, weird eyes, bad anatomy, bad face, deformed, blurry, demonic." \
@@ -95,9 +115,9 @@ for i in $(seq 0 $((NUM_SEGMENTS - 1))); do
         --ulysses_degree 1 \
         --ring_degree 1
         
-    # The output video is saved as portrait_output.mp4 in OUTPUT_DIR. Rename it.
-    if [ -f "${OUTPUT_DIR}/portrait_output.mp4" ]; then
-        mv "${OUTPUT_DIR}/portrait_output.mp4" "${SEGMENT_VIDEO}"
+    # The output video is saved using the basename of the image
+    if [ -f "${OUTPUT_DIR}/${IMAGE_NAME}_output.mp4" ]; then
+        mv "${OUTPUT_DIR}/${IMAGE_NAME}_output.mp4" "${SEGMENT_VIDEO}"
         # Add to concat file for final stitching
         echo "file '${SEGMENT_VIDEO}'" >> "${CONCAT_FILE}"
         echo "✅ Segment $((i+1)) generated successfully."
