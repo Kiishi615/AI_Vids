@@ -29,7 +29,7 @@ mkdir -p "${TMP_DIR}"
 # 1. Get total audio duration in seconds
 DURATION_EXACT=$(ffprobe -i "${FULL_AUDIO_PATH}" -show_entries format=duration -v quiet -of csv="p=0")
 TOTAL_DURATION=$(echo "$DURATION_EXACT" | awk '{print int($1)}')
-SEGMENT_LENGTH=30
+SEGMENT_LENGTH=10
 
 echo "================================================="
 echo "🎵 MUSIC VIDEO AUTO-SPLICER INITIATED 🎵"
