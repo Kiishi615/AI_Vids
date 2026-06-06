@@ -56,7 +56,7 @@ pip install -r requirements.txt
 pip install pyloudnorm
 
 # Fix dependency conflicts: Upgrade HF ecosystem
-pip install --upgrade transformers huggingface_hub datasets gradio
+pip install --upgrade transformers huggingface_hub datasets gradio diffusers
 
 # Explicitly force urllib3 downgrade to satisfy Lightning AI SDK
 pip install "urllib3==2.5.0"
