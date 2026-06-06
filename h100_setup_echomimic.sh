@@ -55,6 +55,12 @@ pip install -r requirements.txt
 # Install missing deps that infer_flash.py needs but aren't in requirements.txt
 pip install pyloudnorm
 
+# Fix dependency conflicts: Upgrade HF ecosystem
+pip install --upgrade transformers huggingface_hub datasets gradio
+
+# Explicitly force urllib3 downgrade to satisfy Lightning AI SDK
+pip install "urllib3==2.5.0"
+
 # Make sure huggingface-cli is available for fast model downloads
 pip install -U "huggingface_hub[cli]"
 
