@@ -42,6 +42,8 @@ TMP_DIR="${OUTPUT_DIR}/tmp_audio"
 mkdir -p "${OUTPUT_DIR}"
 mkdir -p "${TMP_DIR}"
 
+START_SEGMENT=${1:-0}
+
 # 1. Get total audio duration in seconds
 DURATION_EXACT=$(ffprobe -i "${FULL_AUDIO_PATH}" -show_entries format=duration -v quiet -of csv="p=0")
 TOTAL_DURATION=$(echo "$DURATION_EXACT" | awk '{print int($1)}')
@@ -51,6 +53,7 @@ echo "================================================="
 echo "🎵 MUSIC VIDEO AUTO-SPLICER INITIATED 🎵"
 echo "Total audio duration: ${TOTAL_DURATION}s"
 echo "Splitting into ${SEGMENT_LENGTH}s segments to prevent AI blur drift..."
+echo "Starting from segment: ${START_SEGMENT}"
 echo "Found ${#IMAGE_FILES[@]} camera angles:"
 for img in "${IMAGE_FILES[@]}"; do
     echo "  - $(basename "$img")"
@@ -67,8 +70,13 @@ NUM_SEGMENTS=$(( (TOTAL_DURATION + SEGMENT_LENGTH - 1) / SEGMENT_LENGTH ))
 CONCAT_FILE="${OUTPUT_DIR}/concat.txt"
 > "${CONCAT_FILE}"
 
-# 2. Process each segment
+# Pre-populate concat file for final stitching
 for i in $(seq 0 $((NUM_SEGMENTS - 1))); do
+    echo "file '${OUTPUT_DIR}/segment_${i}.mp4'" >> "${CONCAT_FILE}"
+done
+
+# 2. Process each segment
+for i in $(seq ${START_SEGMENT} $((NUM_SEGMENTS - 1))); do
     START_TIME=$(( i * SEGMENT_LENGTH ))
     SEGMENT_AUDIO="${TMP_DIR}/segment_${i}.wav"
     SEGMENT_VIDEO="${OUTPUT_DIR}/segment_${i}.mp4"
@@ -125,8 +133,6 @@ for i in $(seq 0 $((NUM_SEGMENTS - 1))); do
     # The output video is saved using the basename of the image
     if [ -f "${OUTPUT_DIR}/${IMAGE_NAME}_output.mp4" ]; then
         mv "${OUTPUT_DIR}/${IMAGE_NAME}_output.mp4" "${SEGMENT_VIDEO}"
-        # Add to concat file for final stitching
-        echo "file '${SEGMENT_VIDEO}'" >> "${CONCAT_FILE}"
         echo "✅ Segment $((i+1)) generated successfully."
     else
         echo "❌ ERROR: Segment $((i+1)) failed to generate!"
@@ -137,8 +143,23 @@ done
 echo "================================================="
 echo "🎞️ Stitching segments together..."
 FINAL_OUTPUT="${OUTPUT_DIR}/FINAL_Music_Video.mp4"
-ffmpeg -y -f concat -safe 0 -i "${CONCAT_FILE}" -c copy "${FINAL_OUTPUT}" -loglevel error
 
-echo "🎉 DONE! Your flawless, blur-free music video is waiting at:"
-echo "${FINAL_OUTPUT}"
+# Check if all segments exist before stitching
+MISSING_SEGMENTS=0
+for i in $(seq 0 $((NUM_SEGMENTS - 1))); do
+    if [ ! -f "${OUTPUT_DIR}/segment_${i}.mp4" ]; then
+        echo "⚠️ Warning: segment_${i}.mp4 is missing!"
+        MISSING_SEGMENTS=1
+    fi
+done
+
+if [ "$MISSING_SEGMENTS" -eq 1 ]; then
+    echo "❌ Cannot stitch final video because some segments are missing."
+    echo "If you resumed from a later segment, ensure older segments are moved to ${OUTPUT_DIR}"
+    echo "Run this script again (or manually use ffmpeg) once all segments are present."
+else
+    ffmpeg -y -f concat -safe 0 -i "${CONCAT_FILE}" -c copy "${FINAL_OUTPUT}" -loglevel error
+    echo "🎉 DONE! Your flawless, blur-free music video is waiting at:"
+    echo "${FINAL_OUTPUT}"
+fi
 echo "================================================="
