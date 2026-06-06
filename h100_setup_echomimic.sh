@@ -55,9 +55,9 @@ pip install -r requirements.txt
 # Install missing deps that infer_flash.py needs but aren't in requirements.txt
 pip install pyloudnorm
 
-# Fix dependency conflicts: Upgrade HF ecosystem but PIN diffusers to 0.30.2 for memory-efficient loading
-pip install --upgrade transformers huggingface_hub datasets gradio
-pip install "diffusers==0.30.2"
+# Fix dependency conflicts: Pin the entire HF ecosystem to the exact versions EchoMimic V3 was built for.
+# This prevents modern (2026) versions of transformers from breaking older diffusers functions.
+pip install "transformers==4.46.2" "diffusers==0.30.1" "huggingface-hub==0.26.0" "gradio==4.44.0" "datasets==3.0.0" "urllib3==2.5.0"
 
 # Explicitly force urllib3 downgrade to satisfy Lightning AI SDK
 pip install "urllib3==2.5.0"
