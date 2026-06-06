@@ -324,10 +324,8 @@ def main():
         print(f"Audio: {audio_path}")
         print(f"Prompt: {prompt}")
         
-        import datetime
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         image_name = os.path.basename(image_path).split('.')[0]
-        output_video_path = os.path.join(save_path, f"{image_name}_{timestamp}_output.mp4")
+        output_video_path = os.path.join(save_path, f"{image_name}_output.mp4")
         
         if os.path.exists(output_video_path):
             print(f"⏭️  Skip: {output_video_path} already exists.")
