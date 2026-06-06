@@ -105,7 +105,7 @@ for i in $(seq 0 $((NUM_SEGMENTS - 1))); do
         --transformer_path "${MODELS_DIR}/echomimicv3-flash-pro/diffusion_pytorch_model.safetensors" \
         --wav2vec_model_dir "${MODELS_DIR}/chinese-wav2vec2-base" \
         --save_path "${OUTPUT_DIR}" \
-        --sampler_name "Flow_Unipc" \
+        --sampler_name "Flow" \
         --video_length ${FRAMES} \
         --guidance_scale 6.0 \
         --audio_guidance_scale 2.5 \
