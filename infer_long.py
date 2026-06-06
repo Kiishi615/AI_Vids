@@ -355,8 +355,10 @@ def main():
         audio_embeds = audio_embeds.unsqueeze(0).to(device=device)
 
         # CHUNKING LOGIC
-        partial_video_length = 81
-        overlap_video_length = 8
+        # H200 (141GB VRAM) can handle ~160 frames vs H100's 81
+        # Fewer chunk boundaries = better temporal coherence + less face morphing
+        partial_video_length = 161
+        overlap_video_length = 16
         
         partial_video_length = int((partial_video_length - 1) // vae.config.temporal_compression_ratio * vae.config.temporal_compression_ratio) + 1 if video_length_actual != 1 else 1
         latent_frames = (partial_video_length - 1) // vae.config.temporal_compression_ratio + 1
