@@ -104,7 +104,7 @@ for i in $(seq ${START_SEGMENT} $((NUM_SEGMENTS - 1))); do
         --video_length ${FRAMES} \
         --guidance_scale 6.0 \
         --audio_guidance_scale 2.5 \
-        --audio_scale 1.2 \
+        --audio_scale 1.4 \
         --neg_scale 1.0 \
         --neg_steps 0 \
         --seed 43 \
