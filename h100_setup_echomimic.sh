@@ -56,7 +56,8 @@ pip install -r requirements.txt
 pip install pyloudnorm
 
 # Install CRITICAL performance dependency for H100/H200 (prevents 20-minute generation slow-downs)
-pip install flash-attn --no-build-isolation
+# We use xformers because flash-attn fails to build from source on Python 3.12 Lightning Studios
+pip install xformers
 
 # Fix dependency conflicts: Pin the entire HF ecosystem to the exact versions EchoMimic V3 was built for.
 # This prevents modern (2026) versions of transformers from breaking older diffusers functions.
