@@ -55,11 +55,6 @@ pip install -r requirements.txt
 # Install missing deps that infer_flash.py needs but aren't in requirements.txt
 pip install pyloudnorm
 
-# Install CRITICAL performance dependency for H100/H200 (prevents 20-minute generation slow-downs)
-# We use xformers because flash-attn fails to build from source on Python 3.12 Lightning Studios.
-# We also upgrade torchvision so it stays compatible with the PyTorch version xformers pulls in.
-pip install xformers torchvision --upgrade
-
 # Fix dependency conflicts: Pin the entire HF ecosystem to the exact versions EchoMimic V3 was built for.
 # This prevents modern (2026) versions of transformers from breaking older diffusers functions.
 pip install "transformers==4.46.2" "diffusers==0.30.1" "huggingface-hub==0.26.0" "gradio==4.44.0" "datasets==3.0.0" "urllib3==2.5.0"
