@@ -62,9 +62,15 @@ pip install "transformers==4.46.2" "diffusers==0.30.1" "huggingface-hub==0.26.0"
 # Explicitly force urllib3 downgrade to satisfy Lightning AI SDK
 pip install "urllib3==2.5.0"
 
-# Make sure huggingface-cli is available for fast model downloads
-pip install -U "huggingface_hub[cli]"
+# Make sure huggingface-cli is available for fast model downloads (but strictly pinned to avoid breaking transformers)
+pip install "huggingface_hub[cli]==0.26.0"
 
+echo ""
+echo "⚠️ IMPORTANT WARNING ⚠️"
+echo "To get 3-minute video generations, this script MUST be run on a Studio created with the official 'PyTorch' template."
+echo "If you use a base Python template, your generation will take 20 minutes because it lacks the pre-compiled CUDA acceleration."
+echo "============================================================"
+echo ""
 echo "✅ Dependencies installed."
 echo ""
 
