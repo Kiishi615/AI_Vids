@@ -55,6 +55,9 @@ pip install -r requirements.txt
 # Install missing deps that infer_flash.py needs but aren't in requirements.txt
 pip install pyloudnorm
 
+# Install CRITICAL performance dependency for H100/H200 (prevents 20-minute generation slow-downs)
+pip install flash-attn --no-build-isolation
+
 # Fix dependency conflicts: Pin the entire HF ecosystem to the exact versions EchoMimic V3 was built for.
 # This prevents modern (2026) versions of transformers from breaking older diffusers functions.
 pip install "transformers==4.46.2" "diffusers==0.30.1" "huggingface-hub==0.26.0" "gradio==4.44.0" "datasets==3.0.0" "urllib3==2.5.0"
