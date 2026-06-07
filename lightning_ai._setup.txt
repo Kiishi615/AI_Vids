@@ -1,0 +1,17 @@
+# 1. Install FFmpeg (required for audio slicing and video stitching)
+sudo apt-get update && sudo apt-get install -y ffmpeg
+
+# 2. Go to the home directory and clone our custom repository
+cd /teamspace/studios/this_studio
+git clone https://github.com/Kiishi615/AI_Vids.git
+cd AI_Vids
+
+# 3. Make all the bash scripts executable
+chmod +x *.sh
+
+# 4. Create the necessary folders for your files
+mkdir -p /teamspace/studios/this_studio/inputs
+mkdir -p /teamspace/studios/this_studio/outputs
+
+# 5. Run the massive setup script (This takes 5-10 mins to download the 19GB models and install libraries)
+bash h100_setup_echomimic.sh

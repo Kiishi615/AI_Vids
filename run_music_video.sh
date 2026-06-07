@@ -17,23 +17,18 @@ conda activate echomimic_v3
 WORKSPACE="/teamspace/studios/this_studio"
 MODELS_DIR="${WORKSPACE}/echomimic_v3/models/flash"
 
-# Auto-generate dynamic camera angles from the original portrait
-echo "================================================="
-echo "🎥 PREPARING VIRTUAL CAMERAS"
-echo "================================================="
-cd ${WORKSPACE}/AI_Vids
-python generate_camera_angles.py "${WORKSPACE}/inputs/portrait.png"
-
-# Find all portrait images matching 'portrait*.png' or 'portrait*.jpg'
-shopt -s nullglob
-IMAGE_FILES=(${WORKSPACE}/inputs/portrait*.png ${WORKSPACE}/inputs/portrait*.jpg)
-shopt -u nullglob
-
-if [ ${#IMAGE_FILES[@]} -eq 0 ]; then
-    echo "❌ No portrait images found in ${WORKSPACE}/inputs/"
-    echo "   Please upload portrait.png (and optionally portrait_2.png, etc) to ~/inputs/"
-    exit 1
+# Ensure portrait image exists
+CURRENT_IMAGE="${WORKSPACE}/inputs/portrait.png"
+if [ ! -f "${CURRENT_IMAGE}" ]; then
+    CURRENT_IMAGE="${WORKSPACE}/inputs/portrait.jpg"
+    if [ ! -f "${CURRENT_IMAGE}" ]; then
+        echo "❌ No portrait image found in ${WORKSPACE}/inputs/"
+        echo "   Please upload portrait.png or portrait.jpg to ~/inputs/"
+        exit 1
+    fi
 fi
+IMAGE_BASENAME=$(basename "$CURRENT_IMAGE")
+IMAGE_NAME="${IMAGE_BASENAME%.*}"
 FULL_AUDIO_PATH="${WORKSPACE}/inputs/audio.wav"
 
 OUTPUT_DIR="${WORKSPACE}/outputs/music_video"
@@ -54,10 +49,7 @@ echo "🎵 MUSIC VIDEO AUTO-SPLICER INITIATED 🎵"
 echo "Total audio duration: ${TOTAL_DURATION}s"
 echo "Splitting into ${SEGMENT_LENGTH}s segments to prevent AI blur drift..."
 echo "Starting from segment: ${START_SEGMENT}"
-echo "Found ${#IMAGE_FILES[@]} camera angles:"
-for img in "${IMAGE_FILES[@]}"; do
-    echo "  - $(basename "$img")"
-done
+echo "Using portrait image: $IMAGE_BASENAME"
 echo "================================================="
 
 cd ${WORKSPACE}/AI_Vids
@@ -94,12 +86,7 @@ for i in $(seq ${START_SEGMENT} $((NUM_SEGMENTS - 1))); do
     
     echo "Segment Frames: $FRAMES"
     
-    IMAGE_IDX=$(( i % ${#IMAGE_FILES[@]} ))
-    CURRENT_IMAGE="${IMAGE_FILES[$IMAGE_IDX]}"
-    IMAGE_BASENAME=$(basename "$CURRENT_IMAGE")
-    IMAGE_NAME="${IMAGE_BASENAME%.*}"
-    
-    echo "🎥 Camera Angle: $IMAGE_BASENAME"
+    echo "🎥 Using Image: $IMAGE_BASENAME"
     
     # Run EchoMimic Inference
     python infer_long.py \
